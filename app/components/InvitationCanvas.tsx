@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+
 export default function InvitationCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -17,7 +18,7 @@ export default function InvitationCanvas() {
   // Set video source based on screen size
   useEffect(() => {
     const updateSrc = () => {
-      const basePath = process.env.NODE_ENV === "production" ? "/Bandhanam" : "";
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
       if (window.innerWidth >= 768) {
         setVideoSrc(`${basePath}/largeScreenInvitation.mp4`);
       } else {
