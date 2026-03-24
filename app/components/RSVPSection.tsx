@@ -11,7 +11,7 @@ export default function RSVPSection() {
 
   useEffect(() => {
     setIsMounted(true);
-    const targetDate = new Date("2026-04-04T00:00:00+05:30").getTime();
+    const targetDate = new Date("2026-04-07T00:00:00+05:30").getTime();
 
     const calculateTimeLeft = () => {
       const difference = targetDate - new Date().getTime();
@@ -35,7 +35,7 @@ export default function RSVPSection() {
   return (
     <section className="py-6 bg-transparent text-slate-900 relative flex flex-col items-center overflow-hidden">
       {/* Background flare - replaced expensive blur with optimized radial gradient */}
-      <div 
+      <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none -z-10"
         style={{ background: 'radial-gradient(circle, rgba(234,179,8,0.15) 0%, rgba(234,179,8,0) 70%)' }}
       ></div>
@@ -67,7 +67,7 @@ export default function RSVPSection() {
                     <Timer className="w-6 h-6 text-yellow-600 animate-pulse" />
                     <h3 className="text-yellow-600 font-bold tracking-[0.2em] text-sm uppercase">Join Us</h3>
                   </div>
-                  <h2 className="text-3xl lg:text-5xl font-light text-slate-900 mb-2">Wedding on 4 April</h2>
+                  <h2 className="text-3xl lg:text-5xl font-light text-slate-900 mb-2">Wedding on 7 April</h2>
                   <p className="text-slate-600 tracking-widest text-sm uppercase">The Countdown Begins</p>
                 </div>
 

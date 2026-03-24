@@ -6,6 +6,8 @@ import AudioController from "./components/AudioController";
 import ScrollProgressIndicator from "./components/ScrollProgressIndicator";
 import Footer from "./components/Footer";
 import InvitationCanvas from "./components/InvitationCanvas";
+import MobileHero from "./components/MobileHero";
+import WhatsAppSupport from "./components/WhatsAppSupport";
 
 export default function Home() {
   return (
@@ -36,8 +38,9 @@ export default function Home() {
           <EventsTimeline />
           <InteractiveGallery />
           <LocationSection />
+          <WhatsAppSupport />
 
-          {/* <Footer /> */}
+          <Footer />
         </div>
       </div>
     </main>

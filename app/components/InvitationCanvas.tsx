@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 
 
+import WeddingNames from "./WeddingNames";
+
+
 export default function InvitationCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -87,7 +90,7 @@ export default function InvitationCanvas() {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full h-[100dvh] overflow-hidden bg-transparent flex flex-col items-center justify-center p-2 md:p-6 lg:p-8 gap-4 md:gap-6">
+    <div ref={containerRef} className="relative w-full h-[100dvh] overflow-hidden bg-black">
       <style dangerouslySetInnerHTML={{
         __html: `
         @keyframes fadeInUp {
@@ -101,19 +104,34 @@ export default function InvitationCanvas() {
         }
       `}} />
 
-      {/* Video Container */}
+      {/* Name Overlay (z-index 1) - Positioned higher to fit message below */}
+      <div className="absolute bottom-32 left-0 right-0 z-20 px-4 pointer-events-none animate-fade-in-up">
+        <WeddingNames className="pointer-events-auto" />
+      </div>
+
+      {/* Video Container (z-index 0) */}
       <div
-        className={`w-full max-w-5xl flex-1 relative group ring-4 ring-emerald-400/30 rounded-2xl md:rounded-[32px] overflow-hidden shadow-2xl bg-black/50 backdrop-blur-xl transition-all duration-1000 min-h-0 ${isVideoFinished ? "opacity-90" : "opacity-100"
+        className={`w-full h-full relative group transition-all duration-1000 ${isVideoFinished ? "opacity-90" : "opacity-100"
           }`}
       >
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          @keyframes pointRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+          }
+          .animate-point-right {
+            animation: pointRight 1s ease-in-out infinite;
+          }
+        `}} />
+
         {videoSrc && (
           <video
             ref={videoRef}
             src={videoSrc}
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             playsInline
-            muted={isMuted} // Controlled by our manual button
-            // Controls are removed completely
+            muted={isMuted}
             onEnded={() => {
               setIsVideoFinished(true);
               if (containerRef.current && containerRef.current.nextElementSibling) {
@@ -126,14 +144,11 @@ export default function InvitationCanvas() {
         {/* Unmute Button & Arrow */}
         {isMuted && !isVideoFinished && (
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-3 z-50">
-            {/* Animated Arrow pointing down */}
             <div className="animate-bounce text-white/90 drop-shadow-md">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </div>
-
-            {/* Glassy Unmute Button */}
             <button
               onClick={toggleMute}
               className="flex items-center gap-2 px-6 py-3 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-white transition-all ring-1 ring-white/30 shadow-2xl"
@@ -147,35 +162,38 @@ export default function InvitationCanvas() {
           </div>
         )}
 
-        {/* Rewatch Button & Arrow */}
+        {/* Improved Rewatch UI - Center Focused */}
         {isVideoFinished && (
-          <div className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 flex items-center gap-3 z-50 transition-opacity duration-1000">
-            {/* Glassy Rewatch Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsVideoFinished(false);
-                if (videoRef.current) {
-                  videoRef.current.currentTime = 0;
-                  videoRef.current.muted = false;
-                  setIsMuted(false);
-                  videoRef.current.play().catch(() => { });
-                }
-              }}
-              className="flex items-center gap-2 px-5 py-2.5 bg-black/50 hover:bg-black/70 backdrop-blur-md rounded-full text-white transition-all ring-1 ring-white/40 shadow-xl"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <span className="text-sm font-medium tracking-wide">Rewatch</span>
-            </button>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6 z-50 transition-all duration-1000 animate-fade-in-up">
+            <div className="flex items-center gap-4">
+              {/* Pointing Arrow */}
+              <div className="animate-point-right text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]">
+                <svg className="w-10 h-10 rotate-[-90deg]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
 
-            {/* Animated Arrow pointing left towards the button */}
-            <div className="animate-pulse text-white/90 drop-shadow-md">
-              <svg className="w-6 h-6 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsVideoFinished(false);
+                  if (videoRef.current) {
+                    videoRef.current.currentTime = 0;
+                    videoRef.current.muted = false;
+                    setIsMuted(false);
+                    videoRef.current.play().catch(() => { });
+                  }
+                }}
+                className="group relative flex items-center gap-3 px-8 py-4 bg-emerald-600/80 hover:bg-emerald-500 backdrop-blur-xl rounded-2xl text-white transition-all ring-2 ring-emerald-400/50 shadow-[0_0_40px_rgba(5,150,105,0.4)] hover:shadow-[0_0_60px_rgba(5,150,105,0.6)] active:scale-95"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
+                <svg className="w-6 h-6 transition-transform group-hover:rotate-180 duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span className="text-xl font-bold tracking-wider">Play Again</span>
+              </button>
             </div>
+            <p className="text-white/60 text-sm font-medium tracking-[0.3em] uppercase animate-pulse">Experience the moment again</p>
           </div>
         )}
 
@@ -183,26 +201,18 @@ export default function InvitationCanvas() {
         {!isVideoFinished && (
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-white/10 pointer-events-none mix-blend-overlay"></div>
         )}
+
+        {/* Bottom Message (Overlay) - Visible on all screens */}
+        <div className="absolute bottom-12 left-0 right-0 z-20 flex flex-col items-center pointer-events-none px-4">
+          <p className="text-sm md:text-lg lg:text-xl font-medium text-white/90 tracking-widest uppercase text-center max-w-2xl drop-shadow-lg drop-shadow-black/50">
+            {typedMessage}
+            <span className="inline-block w-[2px] h-[1em] bg-white/70 ml-2 animate-pulse align-text-bottom"></span>
+          </p>
+        </div>
+
+
+
       </div>
-
-      {/* Liquid Glass Text Block (Hidden on mobile, visible on desktop) */}
-      <div className="hidden lg:flex flex-col items-center text-center space-y-4 w-full max-w-4xl px-10 py-6 rounded-[2.5rem] bg-gradient-to-br from-white/50 to-white/10 backdrop-blur-xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1),inset_0_0_20px_rgba(255,255,255,0.8)] border border-white/70 animate-fade-in-up shrink-0 relative overflow-hidden">
-
-        {/* Liquid Shine Overlay */}
-        <div className="absolute top-0 left-0 w-full h-[30%] bg-gradient-to-b from-white/40 to-transparent pointer-events-none"></div>
-
-        <h1 className="text-4xl lg:text-5xl font-serif text-emerald-950 font-bold drop-shadow-md tracking-wide relative z-10">
-          Jeevan Singh <span className="text-red-900/70 font-light mx-2">&</span> Aradhya Singh
-        </h1>
-
-        <div className="h-[2px] w-48 bg-gradient-to-r from-transparent via-red-900/70 to-transparent my-2 relative z-10"></div>
-
-        <p className="text-xl font-medium text-slate-800 tracking-widest uppercase opacity-90 min-h-[30px] relative z-10">
-          {typedMessage}
-          <span className="inline-block w-[3px] h-[1em] bg-red-900/70 ml-2 animate-pulse align-text-bottom"></span>
-        </p>
-      </div>
-
     </div>
   );
 }
