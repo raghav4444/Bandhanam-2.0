@@ -104,6 +104,15 @@ export default function InvitationCanvas() {
         }
       `}} />
 
+      {/* Top Header Overlay (z-index 1) */}
+      <div className="absolute top-10 left-0 right-0 z-20 px-4 flex justify-center pointer-events-none animate-fade-in-up">
+        <div className="px-6 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] ring-1 ring-white/20">
+          <p className="text-white/90 text-[10px] md:text-xs font-black uppercase tracking-[0.4em] flex items-center gap-3">
+            Digital Wedding Invitation Card <span className="text-base md:text-lg">🎴</span>
+          </p>
+        </div>
+      </div>
+
       {/* Name Overlay (z-index 1) - Positioned higher to fit message below */}
       <div className="absolute bottom-32 left-0 right-0 z-20 px-4 pointer-events-none animate-fade-in-up">
         <WeddingNames className="pointer-events-auto" />
@@ -193,7 +202,7 @@ export default function InvitationCanvas() {
                 <span className="text-xl font-bold tracking-wider">Play Again</span>
               </button>
             </div>
-            <p className="text-white/60 text-sm font-medium tracking-[0.3em] uppercase animate-pulse">Experience the moment again</p>
+            <p className="text-white/60 text-sm font-medium uppercase animate-pulse">Experience the moment again</p>
           </div>
         )}
 
